@@ -134,13 +134,19 @@ $$\text{Plasticity} = \frac{1}{T} \sum_{j=1}^{T} R_{j,j}$$
 
 ### 3.1 Activation Function Comparison
 
-Across Permuted MNIST benchmark, B-spline activations consistently outperformed other activation functions for continual learning without applying any explicit continual learning method:
+In Permuted MNIST benchmark, B-spline activations consistently outperformed other activation functions for continual learning without applying any explicit continual learning method:
 
 
-<div align="center">
+<!-- <div align="center">
   <img src="results/visualizations/metrics_comparison.png" alt="metrics_comparison">
-</div>
+</div> -->
 
+<figure align="center">
+  <img src="results/visualizations/metrics_comparison.png" alt="metrics_comparison">
+  <figcaption>
+    B-spline achieves the highest average accuracy (0.75) and lowest forgetting (0.24), outperforming ReLU (0.64, 0.37), Tanh (0.63, 0.63), GELU (0.53, 0.53), and PReLU (0.58, 0.58). It also demonstrates the best backward transfer (BWT: -0.24) among all methods.
+  </figcaption>
+</figure>
 
 - B-spline achieves the highest average accuracy (0.75) with ReLU X it with (0.64)
 - B-spline shows the lowest forgetting (0.24) compared to ReLU (0.37), Tanh (0.63), GELU (0.53), and PReLU (0.58)
