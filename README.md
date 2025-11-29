@@ -11,9 +11,13 @@ This repository contains the implementation of my undergraduate thesis:
 **Institution**: Amirkabir University of Technology
 **Date**: April 2025
 
+---
+
 ## Abstract
 
 Inspired by recent developments in Kolmogorov-Arnold Networks (KANs) [1], this thesis explores learnable B-spline activation functions as a mechanism to mitigate catastrophic forgetting in continual learning. Unlike KANs, which place learnable activation functions on every edge of the network, our approach shares a single B-spline activation function across each layer, significantly reducing runtime overhead while maintaining the beneficial properties of learnable activations. Through experiments on Permuted MNIST, we demonstrate that B-spline activations achieve superior performance compared to other activation functions (ReLU, Tanh, GELU, PReLU) across multiple continual learning metrics.
+
+---
 
 ## 1. Introduction
 
@@ -47,6 +51,8 @@ where $c_i$ are learnable control point coefficients.
 Kolmogorov-Arnold Networks have demonstrated promising performance in addressing catastrophic forgetting in continual learning tasks [1,7].The claim is that KAN avoids catastrophic forgetting by leveraging the locality of splines: since spline bases are local, a sample will only affect nearby spline coefficients, leaving faraway coefficients intact. However, this architecture introduces significant computational overhead due to the large number of learnable activation functions.
 
 Our approach differs by sharing a single learnable B-spline activation function per layer rather than per edge. This design choice dramatically reduces the number of learnable parameters while preserving the local adaptation properties of B-splines.
+
+---
 
 ## 2. Methodology
 
@@ -122,7 +128,6 @@ $$\text{Plasticity} = \frac{1}{T} \sum_{j=1}^{T} R_{j,j}$$
 
 
 
-
 ---
 
 ## 3. Experimental Results
@@ -168,8 +173,6 @@ The B-spline activation (purple line) demonstrates **substantially better retent
 
 
 <!-- per_task_accuracy_bspline -->
-
-
 
 
 
@@ -246,6 +249,10 @@ This experiment directly validates the locality hypothesis: B-splines can learn 
 ![Regression fitting](results/viz_reg/bspline_continual_regression_results.png)
 
 
+
+
+---
+
 ## 4. Discussion
 
 ### 4.1 Why Do B-Splines Mitigate Catastrophic Forgetting?
@@ -259,16 +266,17 @@ One key mechanism contributing to catastrophic forgetting is the overlap in repr
 When a B-spline activation learns to respond to inputs from a new task, only the control points in the relevant region of the input space need to be updated. Control points outside this region remain largely unchanged, preserving the network's response to previous tasks. 
 
 
-**3. Flexibility Without Excessive Parameterization**
+**2. Flexibility Without Excessive Parameterization**
 
 Studies on learnable activation functions have shown they allow for "a reduction of the overall size of the network for a given accuracy" due to their flexibility [5]. Our shared B-spline approach balances this flexibility with parameter efficiency: each layer has only `num_control_points` additional parameters (e.g., 15 parameters for default configuration), compared to KANs which would require this many parameters per edge.
 
 
 
+---
 
-## Optimal Configuration
+## 5. Configuration
 
-Based on comprehensive ablations, the recommended B-spline configuration is:
+Based on ablations, the recommended B-spline configuration is:
 
 ```python
 bSpline(num_control_points=15, degree=1, start_point=-1.0, end_point=1.0, init='relu')
@@ -280,7 +288,9 @@ With training hyperparameters (chosen wiht a simple random grid search):
 - Weight decay: 1e-4
 - LR schedule: Cosine annealing
 
-## Project Structure
+---
+
+## 6. Project Structure
 
 ```
 .
@@ -294,7 +304,9 @@ With training hyperparameters (chosen wiht a simple random grid search):
 └── visualize.py       # Plotting and analysis functions
 ```
 
-## Usage
+---
+
+## 7. Usage
 
 ### Compare activations on Permuted MNIST:
 ```bash
@@ -317,7 +329,7 @@ python3 runner.py --exp compare --dataset split_cifar10 --num_seeds 3
 ```
 
 
-## 5. Conclusion
+## 8. Conclusion
 
 This work demonstrates that learnable B-spline activation functions offer a practical and effective approach to mitigating catastrophic forgetting in continual learning. By leveraging the local support property of B-splines while maintaining computational efficiency through parameter sharing, this method achieves superior performance across multiple benchmarks and metrics compared to other activation functions.
 
@@ -329,7 +341,7 @@ The local support property of B-splines appears to be key to their success, enab
 
 
 
-## Key Insights
+## 9. Key Insights
 
 1. **Learnable activations significantly reduce catastrophic forgetting** without requiring replay buffers, regularization, or architectural modifications
 
@@ -346,7 +358,7 @@ The key insight is that **how we transform representations (activations) matters
 
 
 
-### 4.2 Limitations and Future Work
+## 10 Limitations and Future Work
 
 **Computational Cost**: While more efficient than full KANs, B-spline activations still incur additional computation compared to fixed activations. Future work could explore optimized implementations or hardware acceleration.
 
