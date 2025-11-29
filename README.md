@@ -331,7 +331,7 @@ This work demonstrates that learnable B-spline activation functions offer a prac
 The local support property of B-splines appears to be key to their success, enabling learning in one region of the input space to minimally interfere with previously learned regions.
 
 <p align="center">
-  <img src="results/visualizations/performance_summary.png" alt="performance_summary">
+  <img src="results/visualizations/performance_summary.png" alt="performance_summary" width="75%">
 </p>
 
 
