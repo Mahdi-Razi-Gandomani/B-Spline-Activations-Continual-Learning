@@ -67,7 +67,7 @@ The control points $c_i$ can be initialized to approximate standard activation f
 - **Identity**: $c_i = x_i$
 - **Random**: $c_i \sim \mathcal{N}(0, 1)$
 
-where $x_i$ are uniformly spaced points in $[{start\_point}, {end\_point}]$.
+where $x_i$ are uniformly spaced points in $[{start}, {end}]$.
 
 ### 2.2 Network Architecture
 
