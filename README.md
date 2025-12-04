@@ -313,7 +313,7 @@ python3 runner.py --exp ablations --dataset permuted_mnist --num_seeds 5
 python3 runner.py --exp regression --num_peaks 7 --num_seeds 3
 ```
 
-```
+---
 
 
 ## 8. Conclusion
@@ -322,28 +322,13 @@ This work demonstrates that learnable B-spline activation functions offer a prac
 
 The local support property of B-splines appears to be key to their success, enabling learning in one region of the input space to minimally interfere with previously learned regions.
 
+The key insight is that **how we transform representations (activations) matters as much as what representations we learn (weights)** - and making both learnable gives neural networks greater flexibility to balance stability and plasticity across sequential tasks.
+
 <p align="center">
   <img src="results/visualizations/performance_summary.png" alt="performance_summary" width="75%">
 </p>
 
-
-
-## 9. Key Insights
-
-1. **Learnable activations significantly reduce catastrophic forgetting** without requiring replay buffers, regularization, or architectural modifications
-
-2. **Layer-wise sharing is sufficient** - per-edge learnable functions (as in KAN) are not necessary for continual learning benefits
-
-3. **Simpler is better**: Linear B-splines (degree 1) with 15-25 control points outperform higher-degree splines. NEEDS ADDITOINAL EXPREIMENT.
-
-4. **Initialization matters**: Starting from ReLU-like shapes provides better training dynamics than random or identity initialization
-
-5. **Bounded domains focus learning**: Narrow activation ranges (-1 to 1) work better than wide ranges
-
-
-The key insight is that **how we transform representations (activations) matters as much as what representations we learn (weights)** - and making both learnable gives neural networks greater flexibility to balance stability and plasticity across sequential tasks.
-
-
+---
 
 ## 10 Limitations and Future Work
 
@@ -358,13 +343,7 @@ The key insight is that **how we transform representations (activations) matters
 **Theoretical Guarantee**: Understanding the theoretical properties that make certain configurations more effective
 
 
-
-
-
-
-
-
-
+---
 
 ## References
 
