@@ -21,7 +21,6 @@ def run_act_comp(dataset, num_seeds, save_dir='./results', use_compile=True):
     num_tasks = 5 if 'cifar10' in dataset else 10
     batch_size = 128 if 'cifar10' in dataset else 64
     epochs = 5
-    hidden_sizes = [256, 256]
 
     activations = ['relu', 'tanh', 'gelu', 'prelu', 'bspline']
     results = {}
@@ -48,7 +47,6 @@ def run_act_comp(dataset, num_seeds, save_dir='./results', use_compile=True):
             'optimizer': CONFIGS[act]['optimizer'],
             'activation': act,
             'act_cfg': act_cfg,
-            'hidden_sizes': hidden_sizes,
             'save_dir': save_dir,
             'use_compile': use_compile
         }
@@ -70,7 +68,6 @@ def run_ablations(dataset, num_seeds, save_dir='./results', use_compile=True):
     num_tasks = 5 if 'cifar10' in dataset else 10
     batch_size = 128 if 'cifar10' in dataset else 64
     epochs = 5
-    hidden_sizes = [256, 256]
     lr = 0.0003
     optimizer = 'sgd'
 
@@ -93,7 +90,6 @@ def run_ablations(dataset, num_seeds, save_dir='./results', use_compile=True):
             'optimizer': optimizer,
             'activation': 'bspline',
             'act_cfg': {'num_control_points': cp, 'degree': 3, 'start_point': -2.0, 'end_point': 2.0},
-            'hidden_sizes': hidden_sizes,
             'save_dir': save_dir,
             'use_compile': use_compile
         }
@@ -122,7 +118,6 @@ def run_ablations(dataset, num_seeds, save_dir='./results', use_compile=True):
             'optimizer': optimizer,
             'activation': 'bspline',
             'act_cfg': {'num_control_points': 5, 'degree': deg, 'start_point': -2.0, 'end_point': 2.0},
-            'hidden_sizes': hidden_sizes,
             'save_dir': save_dir,
             'use_compile': use_compile
         }
@@ -151,7 +146,6 @@ def run_ablations(dataset, num_seeds, save_dir='./results', use_compile=True):
             'optimizer': optimizer,
             'activation': 'bspline',
             'act_cfg': {'num_control_points': 5, 'degree': 3, 'start_point': start, 'end_point': end},
-            'hidden_sizes': hidden_sizes,
             'save_dir': save_dir,
             'use_compile': use_compile
         }
@@ -180,7 +174,6 @@ def run_ablations(dataset, num_seeds, save_dir='./results', use_compile=True):
             'optimizer': optimizer,
             'activation': 'bspline',
             'act_cfg': {'num_control_points': 5, 'degree': 3, 'start_point': -2.0, 'end_point': 2.0, 'init': init},
-            'hidden_sizes': hidden_sizes,
             'save_dir': save_dir,
             'use_compile': use_compile
         }
