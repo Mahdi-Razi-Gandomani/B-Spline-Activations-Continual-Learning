@@ -277,7 +277,7 @@ Based on ablations, the recommended B-spline configuration is:
 bSpline(num_control_points=15, degree=1, start_point=-1.0, end_point=1.0, init='relu')
 ```
 
-With training hyperparameters (chosen wiht a simple random grid search):
+With training hyperparameters (chosen with a simple random grid search):
 - Optimizer: SGD with momentum=0.9
 - Learning rate: 0.0003
 - Weight decay: 1e-4
