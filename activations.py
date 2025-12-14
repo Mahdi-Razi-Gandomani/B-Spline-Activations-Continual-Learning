@@ -76,6 +76,15 @@ class bSpline(nn.Module):
         return output.reshape(x_shape)
 
 
+class Swish(nn.Module):
+    def __init__(self, beta=1.0):
+        super(Swish, self).__init__()
+        self.beta = nn.Parameter(torch.tensor(beta))
+    
+    def forward(self, x):
+        return x * torch.sigmoid(self.beta * x)
+
+
     
 
 # import torch
@@ -110,6 +119,8 @@ def get_activation(name, **kwargs):
         return nn.GELU()
     elif name == 'prelu':
         return nn.PReLU()
+    elif name == 'swish':
+        return Swish(beta=kwargs.get('beta', 1.0))
     elif name == 'bspline':
         act = bSpline(num_control_points=kwargs.get('num_control_points', 15), degree=kwargs.get('degree', 1), start_point=kwargs.get('start_point', -1.0),
                 end_point=kwargs.get('end_point', 1.0), init=kwargs.get('init', 'leaky_relu')
