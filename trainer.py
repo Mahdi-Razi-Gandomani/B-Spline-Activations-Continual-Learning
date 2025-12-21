@@ -21,18 +21,17 @@ class Trainer:
         self.epoch_accs = []
         self.comp_metrics = CompMetrics()
         self.optimizer = self._make_optimizer()
-
         self.scheduler = optim.lr_scheduler.CosineAnnealingLR(self.optimizer,T_max=self.cfg.get("epochs", 5))
-
         self.crite = nn.CrossEntropyLoss()
+        
 
     def _make_optimizer(self):
         lr = self.cfg.get('lr')
         opt_name = self.cfg.get('optimizer')
         if opt_name == 'sgd':
-            return optim.SGD(self.model.parameters(), lr=lr, momentum=self.cfg.get('momentum', 0.9), weight_decay=self.cfg.get('weight_decay', 1e-4))
+            return optim.SGD(self.model.parameters(), lr=lr, momentum=self.cfg.get('momentum', 0.9))
         else:
-            return optim.Adam(self.model.parameters(), lr=lr, weight_decay=self.cfg.get('weight_decay', 1e-4))
+            return optim.Adam(self.model.parameters(), lr=lr)
 
 
     def train_task(self, task_id, train_loader, vb=True):
