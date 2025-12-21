@@ -21,7 +21,6 @@ class Trainer:
         self.epoch_accs = []
         self.comp_metrics = CompMetrics()
         self.optimizer = self._make_optimizer()
-        self.scheduler = optim.lr_scheduler.CosineAnnealingLR(self.optimizer,T_max=self.cfg.get("epochs", 5))
         self.crite = nn.CrossEntropyLoss()
         
 
@@ -78,8 +77,6 @@ class Trainer:
 
             if vb:
                 print(f"Epoch {epoch+1}: Loss={avg_loss:.4f}, Acc={accuracy:.4f}")
-
-            self.scheduler.step()
 
         task_time = self.comp_metrics.end_timer()
 
