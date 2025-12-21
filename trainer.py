@@ -73,9 +73,6 @@ class Trainer:
                     task_samples_x.append(data.detach().cpu())
                     task_samples_y.append(target.detach().cpu())
 
-                if self.use_ewc:
-                    prev_params = {name: p.detach().clone() for name, p in self.model.named_parameters()}
-
                 
                 self.optimizer.zero_grad()
                 output = self.model(data)
@@ -95,9 +92,6 @@ class Trainer:
                 
                 loss.backward()
                 self.optimizer.step()
-
-                if self.use_ewc:
-                    self.regularizer.after_step(self.model, prev_params)
                     
                 epoch_loss += loss.item()
                 pred = output.argmax(dim=1, keepdim=True)
