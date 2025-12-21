@@ -8,6 +8,7 @@ import json
 from pathlib import Path
 from metrics import CLMetrics, CompMetrics
 from tqdm import tqdm
+from ewc import get_ewc
 
 
 class Trainer:
@@ -23,6 +24,17 @@ class Trainer:
         self.optimizer = self._make_optimizer()
         self.crite = nn.CrossEntropyLoss()
         
+        self.use_ewc = cfg.get('use_ewc', False)
+        self.use_er = cfg.get('use_er', False)
+
+        if self.use_ewc:
+            self.regularizer = get_ewc(cfg, self.model, self.device)
+        if self.use_er:
+            self.er_buffer_x = []
+            self.er_buffer_y = []
+            self.er_buffer_max = self.cfg.get('er_buffer_size', 500)
+            self.er_lambda = self.cfg.get('er_lambda', 1.0)
+            self.reservoir_count = 0
 
     def _make_optimizer(self):
         lr = self.cfg.get('lr')
@@ -48,16 +60,45 @@ class Trainer:
 
             pbar = tqdm(train_loader, desc=f"task {task_id+1}, epoch {epoch+1}/{epochs}") if vb else train_loader
 
+            # Store samples from this task for future replay
+            if self.use_er:
+                task_samples_x = []
+                task_samples_y = []
+
+            
             for data, target in pbar:
                 data, target = data.to(self.device), target.to(self.device)
 
+                if self.use_er and epoch == 0:
+                    task_samples_x.append(data.detach().cpu())
+                    task_samples_y.append(target.detach().cpu())
+
+                if self.use_ewc:
+                    prev_params = {name: p.detach().clone() for name, p in self.model.named_parameters()}
+
+                
                 self.optimizer.zero_grad()
                 output = self.model(data)
                 loss = self.crite(output, target)
 
+ 
+                if self.use_er and len(self.er_buffer_x) > 0:
+                    replay_x, replay_y = self._sample_er_batch()
+                    replay_x = replay_x.to(self.device)
+                    replay_y = replay_y.to(self.device)
+                    replay_out = self.model(replay_x)
+                    replay_loss = self.crite(replay_out, replay_y)
+                    loss = loss + self.er_lambda * replay_loss
+
+                if self.use_ewc:
+                    loss = loss + self.regularizer.penalty(self.model)
+                
                 loss.backward()
                 self.optimizer.step()
 
+                if self.use_ewc:
+                    self.regularizer.after_step(self.model, prev_params)
+                    
                 epoch_loss += loss.item()
                 pred = output.argmax(dim=1, keepdim=True)
                 correct += pred.eq(target.view_as(pred)).sum().item()
@@ -65,7 +106,11 @@ class Trainer:
 
                 if vb:
                     pbar.set_postfix({'loss': f'{loss.item():.4f}', 'acc': f'{100. * correct / total:.2f}%'})
-
+                        
+                    
+            if self.use_er and epoch == 0 and task_samples_x:
+                self._update_er_buffer(task_samples_x, task_samples_y)
+                
             avg_loss = epoch_loss / len(train_loader)
             accuracy = correct / total
             task_losses.append(avg_loss)
@@ -112,7 +157,7 @@ class Trainer:
             accs.append(acc)
 
             if vb:
-                print(f"Task {task_id+1}: {acc:.4f}")
+                print(f"Task {task_id+1}: {acc:.2f}")
 
         return accs
 
@@ -123,6 +168,9 @@ class Trainer:
             train_stats = self.train_task(task_id, task['train'], vb=vb)
             self.history.append(train_stats)
 
+            if self.use_ewc:
+                self.regularizer.on_task_end(self.model, task['train'], self.crite, self.device)
+            
             print(f"\nafter Task {task_id + 1}:")
             accs = self.eval_all_tasks(task_id, vb=True)
             self.acc_matrix[task_id, : len(accs)] = accs
@@ -146,6 +194,39 @@ class Trainer:
             'epoch_accs': self.epoch_accs
         }
 
+
+    
+    def _update_er_buffer(self, data_batches, target_batches):
+        all_data = torch.cat(data_batches, dim=0)
+        all_targets = torch.cat(target_batches, dim=0)
+        
+        n_samples = len(all_data)
+        for i in range(n_samples):
+            x = all_data[i]
+            y = all_targets[i]
+            
+            if len(self.er_buffer_x) < self.er_buffer_max:
+                self.er_buffer_x.append(x)
+                self.er_buffer_y.append(y)
+            else:
+                j = np.random.randint(0, self.reservoir_count + 1)
+                if j < self.er_buffer_max:
+                    self.er_buffer_x[j] = x
+                    self.er_buffer_y[j] = y
+            
+            self.reservoir_count += 1
+
+    def _sample_er_batch(self):
+        size = min(len(self.er_buffer_x), 64)
+        
+        inds = torch.randint(0, len(self.er_buffer_x), (size, ))
+        xs = torch.stack([self.er_buffer_x[i] for i in inds], dim=0)
+        ys = torch.stack([self.er_buffer_y[i] for i in inds], dim=0)
+        
+        return xs, ys
+
+
+    
     def save_results(self, save_dir):
         save_path = Path(save_dir)
         save_path.mkdir(parents=True, exist_ok=True)
@@ -161,21 +242,25 @@ def run_experiment(cfg, seed, vb=True):
 
     tasks = get_dataset(cfg['dataset'], cfg['num_tasks'], cfg['batch_size'])
 
-
-    if 'permuted_mnist' in cfg['dataset'].lower():
+    dname = cfg['dataset'].lower()
+    if 'permuted_mnist' in dname or 'rotated_mnist' in dname:
         in_size = 784
         out_size = 10
         hidden_sizes = [256, 256]
         model_type = 'mlp'
-    elif 'cifar10' in cfg['dataset'].lower():
-        in_size = 3
-        out_size = 10 // cfg['num_tasks']
-        model_type = 'cnn'
+    elif 'split_mnist' in dname:
+        in_size = 784
+        out_size = 2
+        hidden_sizes = [256, 256]
+        model_type = 'mlp'
+    # elif 'cifar10' in dname:
+    #     in_size = 3
+    #     out_size = 10 // cfg['num_tasks']
+    #     model_type = 'cnn'
     else:
         raise ValueError()
 
-    model = create_model(model_type, in_size, out_size, cfg['activation'], hidden_sizes=hidden_sizes, act_cfg=cfg.get('act_cfg', {}))
-
+    model = create_model(model_type, in_size, out_size, cfg['activation'], hidden_sizes=hidden_sizes,act_cfg=cfg.get('act_cfg', {}), shared_act=cfg.get('shared_act', False))
 
     use_compile = cfg.get('use_compile', False)
     if use_compile and hasattr(torch, 'compile'):
