@@ -24,8 +24,8 @@ class Trainer:
         self.optimizer = self._make_optimizer()
         self.crite = nn.CrossEntropyLoss()
         
-        self.use_ewc = cfg.get('use_ewc', False)
-        self.use_er = cfg.get('use_er', False)
+        self.use_ewc = cfg.get('method', 'none') == 'ewc'
+        self.use_er = cfg.get('method', 'none') == 'er'
 
         if self.use_ewc:
             self.regularizer = get_ewc(cfg, self.model, self.device)
