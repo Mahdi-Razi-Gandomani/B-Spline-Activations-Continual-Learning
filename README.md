@@ -33,13 +33,12 @@ B-splines can be computed efficiently using the Cox-de Boor formula:
 
 $$
 B_{i,0}(x) =
-\left\{
-\begin{array}{ll}
+\begin{cases}
 1 & \text{if } t_i \le x < t_{i+1} \\
 0 & \text{otherwise}
-\end{array}
-\right\}
+\end{cases}
 $$
+
 
 
 $$B_{i,k}(x) = \frac{x - t_i}{t_{i+k} - t_i}B_{i,k-1}(x) + \frac{t_{i+k+1} - x}{t_{i+k+1} - t_{i+1}}B_{i+1,k-1}(x)$$
