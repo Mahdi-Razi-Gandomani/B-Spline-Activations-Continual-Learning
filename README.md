@@ -340,15 +340,15 @@ arXiv
 
 ---
 
-## 📬 Contact
+## Contact
 
 For any questions or suggestions, please reach out to:
 
-- **Email**: [mahdi.razi@aut.ac.ir]
+- **Email**: [mahdi.razi099@gmail.com]
 
 ---
 
-## ⭐ Acknowledgments
+## Acknowledgments
 
 Special thanks to my supervisors **Dr. Ali Mohades** for their invaluable guidance and support throughout this project.
 
