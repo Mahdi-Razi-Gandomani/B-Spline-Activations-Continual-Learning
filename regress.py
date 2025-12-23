@@ -67,7 +67,7 @@ def regression_multi_run(activation, optimizer, lr, num_seeds, n_peak, n_num_per
     for seed in range(num_seeds):
         set_seed(seed)
         ####
-        model = create_model('mlp', 1, 1, act=activation).to(device)
+        model = create_model('mlp', 1, 1, act=activation, act_cfg={'num_control_points': 15, 'degree': 1, 'start_point': -1.0, 'end_point': 1.0}).to(device)
         #####
         ys = regression_run(model, optimizer, lr, x_grid, x_sample, y_sample, n_peak, n_num_per_peak, device)
         all_results.append(ys)
