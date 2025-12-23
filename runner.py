@@ -18,12 +18,12 @@ CONFIGS = {
 def run_act_comp(dataset, num_seeds, save_dir='./results', use_compile=True):
     print(f"\nDataset: {dataset}\n")
 
-    if 'split_mnist' in dataset or 'rotated_mnist' in dataset:
+    if 'split_mnist' in dataset:
         num_tasks = 5
-        batch_size = 64
     else:  # permuted_mnist
         num_tasks = 10
-        batch_size = 64
+
+    batch_size = 64
     epochs = 5
 
     activations = ['relu', 'sigmoid', 'tanh', 'gelu', 'prelu', 'swish', 'bspline']
@@ -65,18 +65,16 @@ def run_act_comp(dataset, num_seeds, save_dir='./results', use_compile=True):
 
 
 def run_ablations(dataset, num_seeds, save_dir='./results', use_compile=True):
-
     print(f"\nDataset: {dataset}\n")
 
     all_results = {}
 
-    # Determine num_tasks and batch_size based on dataset
-    if 'split_mnist' in dataset or 'rotated_mnist' in dataset:
+    if 'split_mnist' in dataset:
         num_tasks = 5
-        batch_size = 64
     else:  # permuted_mnist
         num_tasks = 10
-        batch_size = 64
+    
+    batch_size = 64    
     epochs = 5
     lr = 0.0003
     optimizer = 'sgd'
@@ -111,33 +109,33 @@ def run_ablations(dataset, num_seeds, save_dir='./results', use_compile=True):
     vizz(save_dir, cp_names, folder_names, output_dir=str(Path(save_dir) / f'{dataset}_viz_cp'))
 
 
-    print("\nDegrees")
-    deg_vals = [1, 2, 3, 4, 5]
-    deg_results = {}
-    deg_names = []
-    folder_names = []
-    for deg in deg_vals:
-        print("\n Deg: ", deg)
-        name = f'deg_{deg}'
-        deg_names.append(name)
-        cfg = {
-            'name': f'{dataset}_bspline_{name}',
-            'dataset': dataset,
-            'num_tasks': num_tasks,
-            'batch_size': batch_size,
-            'epochs': epochs,
-            'lr': lr,
-            'optimizer': optimizer,
-            'activation': 'bspline',
-            'act_cfg': {'num_control_points': 20, 'degree': deg, 'start_point': -2.0, 'end_point': 2.0},
-            'save_dir': save_dir,
-            'use_compile': use_compile
-        }
-        folder_names.append(cfg['name'])
-        result = run_multi_seed(cfg, num_seeds=num_seeds, vb=True)
-        deg_results[name] = result
-    all_results['degree'] = deg_results
-    vizz(save_dir, deg_names, folder_names, output_dir=str(Path(save_dir) / f'{dataset}_viz_degree'))
+    # print("\nDegrees")
+    # deg_vals = [1, 2, 3, 4, 5]
+    # deg_results = {}
+    # deg_names = []
+    # folder_names = []
+    # for deg in deg_vals:
+    #     print("\n Deg: ", deg)
+    #     name = f'deg_{deg}'
+    #     deg_names.append(name)
+    #     cfg = {
+    #         'name': f'{dataset}_bspline_{name}',
+    #         'dataset': dataset,
+    #         'num_tasks': num_tasks,
+    #         'batch_size': batch_size,
+    #         'epochs': epochs,
+    #         'lr': lr,
+    #         'optimizer': optimizer,
+    #         'activation': 'bspline',
+    #         'act_cfg': {'num_control_points': 20, 'degree': deg, 'start_point': -2.0, 'end_point': 2.0},
+    #         'save_dir': save_dir,
+    #         'use_compile': use_compile
+    #     }
+    #     folder_names.append(cfg['name'])
+    #     result = run_multi_seed(cfg, num_seeds=num_seeds, vb=True)
+    #     deg_results[name] = result
+    # all_results['degree'] = deg_results
+    # vizz(save_dir, deg_names, folder_names, output_dir=str(Path(save_dir) / f'{dataset}_viz_degree'))
 
 
     print("\nInit")
@@ -197,8 +195,7 @@ def run_ablations(dataset, num_seeds, save_dir='./results', use_compile=True):
         result = run_multi_seed(cfg, num_seeds=num_seeds, vb=True)
         shared_act_results[name] = result
     all_results['shared_activation'] = shared_act_results
-    vizz(save_dir, shared_act_names, folder_names, output_dir=str(Path(save_dir) / f'{dataset}_viz_shared_act'),
-         num_tasks=num_tasks, num_seeds=num_seeds)
+    vizz(save_dir, shared_act_names, folder_names, output_dir=str(Path(save_dir) / f'{dataset}_viz_shared_act'))
 
     return all_results
 
@@ -206,12 +203,12 @@ def run_ablations(dataset, num_seeds, save_dir='./results', use_compile=True):
 def run_combine(dataset, method, num_seeds, save_dir='./results', use_compile=True):
     print(f"\nDataset: {dataset}, method: {method}\n")
 
-    if 'split_mnist' in dataset or 'rotated_mnist' in dataset:
+    if 'split_mnist' in dataset:
         num_tasks = 5
-        batch_size = 64
     else:  # permuted_mnist
         num_tasks = 10
-        batch_size = 64
+
+    batch_size = 64
     epochs = 5
 
     activations = ['relu', 'bspline']
@@ -247,8 +244,7 @@ def run_combine(dataset, method, num_seeds, save_dir='./results', use_compile=Tr
         result = run_multi_seed(cfg, num_seeds=num_seeds, vb=True)
         results[act] = result
 
-    vizz(save_dir, activations, folder_names, output_dir=str(Path(save_dir) / f'{dataset}_visualizations_{method}'),
-         num_tasks=num_tasks, num_seeds=num_seeds)
+    vizz(save_dir, activations, folder_names, output_dir=str(Path(save_dir) / f'{dataset}_visualizations_{method}'))
 
     return results
 
