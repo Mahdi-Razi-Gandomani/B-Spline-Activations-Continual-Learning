@@ -11,7 +11,7 @@ This repository contains the implementation of my undergraduate Project:
 
 ## Abstract
 
-Inspired by recent developments in Kolmogorov-Arnold Networks (KANs), this project explores using a single B-spline activation function across each layer in multi layer perceptrons (MLPs), in order to reduce runtime overhead while maintaining the beneficial properties of learnable spline based activations. Through experiments on Permuted MNIST and Split MNIST, we demonstrate that B-spline activations achieve better performance compared to other activation functions (ReLU, Tanh, GELU, PReLU) and also combining them with established continual learning methods (Elastic Weight Consolidation (EWC) and Experience Replay (ER)) can lead to improved performance on continual learning metrics.
+Inspired by recent developments in Kolmogorov-Arnold Networks (KANs), this project explores using a single B-spline activation function across each layer in multi layer perceptrons (MLPs), in order to reduce runtime overhead while maintaining the beneficial properties of learnable spline based activations. Through experiments on Permuted MNIST and Split MNIST, we demonstrate that B-spline activations achieve better performance compared to other activation functions (ReLU, Tanh, GELU, PReLU, Swish) and also combining them with established continual learning methods (Elastic Weight Consolidation (EWC) and Experience Replay (ER)) can lead to improved performance on continual learning metrics.
 
 ---
 
