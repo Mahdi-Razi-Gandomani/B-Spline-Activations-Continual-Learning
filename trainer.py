@@ -237,7 +237,7 @@ def run_experiment(cfg, seed, vb=True):
     tasks = get_dataset(cfg['dataset'], cfg['num_tasks'], cfg['batch_size'])
 
     dname = cfg['dataset'].lower()
-    if 'permuted_mnist' in dname or 'rotated_mnist' in dname:
+    if 'permuted_mnist' in dname:
         in_size = 784
         out_size = 10
         hidden_sizes = [256, 256]
