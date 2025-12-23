@@ -1,5 +1,5 @@
 
-This repository contains the implementation of my undergraduate Project: 
+This repository contains the implementation of my undergraduate Project.
 
 **Author**: Mahdi Razi Gandomani  
 **Supervisors**: Dr. Ali Mohades  
