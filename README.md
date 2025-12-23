@@ -1,5 +1,3 @@
-# Learnable B-Spline Activation Functions for Mitigating Catastrophic Forgetting in Continual Learning
-
 
 This repository contains the implementation of my undergraduate Project: 
 **Author**: Mahdi Razi Gandomani  
@@ -19,7 +17,7 @@ Inspired by recent developments in Kolmogorov-Arnold Networks (KANs), this proje
 
 ### 1.1 Catastrophic Forgetting
 
-**Catastrophic forgetting** is the phenomenon where neural networks severely forget previously learned information upon learning new information [2]. This represents a fundamental challenge in **continual learning** scenarios where neural networks must learn sequential tasks without forgetting prior knowledge. The main cause of catastrophic forgetting is the overlap in representations at the layer of neural networks; When a neural network is trained sequentially on new tasks, gradient updates for the new task modify the same weights that were important for previous tasks, causing the network to forget earlier knowledge [2, 8].
+**Catastrophic forgetting** is the phenomenon where neural networks severely forget previously learned information upon learning new information [2]. This represents a fundamental challenge in **continual learning** scenarios where neural networks must learn sequential tasks without forgetting prior knowledge. The main cause of catastrophic forgetting is the overlap in representations in the layers of neural networks; When a neural network is trained sequentially on new tasks, gradient updates for the new task modify the same weights that were important for previous tasks, causing the network to forget earlier knowledge [2, 8].
 
 
 
@@ -60,7 +58,7 @@ B-spline basis functions $B_{i,p}(x)$ are non-zero only on the interval $[t_i, t
 
 KAN [1] is a new neural network architecture that replaces linear weights on nodes with learnable univariate functions on edges, these functions can be parameterized by B-Splines. This architecture is inspired by the Kolmogorov–Arnold representation theorem, which states that any multivariate continuous function can be represented as a sum of univariate functions. 
 The authors of KAN proposed that unlike traditional MLPs with fixed activation functions, KANs' learnable spline-based activations on edges enable local parameter updates that should provide robustness against catastrophic forgetting. The theoretical basis was that KANs update parameters more locally and sparsely, which should prevent previously learned information from being overwritten during training on new tasks. However, this comes at a computational cost: B-spline KANs are typically much slower to train than MLPs, and larger models become impractical. This limitation was acknowledged by the original authors themselves: Liu et al. noted that "the biggest bottleneck of KANs lies in its slow training. KANs are usually 10x slower than MLPs."
-After introducing KANs, There has been efficient variants (SineKAN [7], ReLU-KAN [10], Efficient-KAN [11], and others) that recover computational efficiency to some extent while preserving the advantages. In this work we bring back learnable B-spline activations functions to MLPs and examine sharing a **single** learnable B-spline activation function **per layer** in MLPs. This design choice dramatically reduces the number of learnable parameters while hopefully preserving the continual learning advantages of B-splines in neural networks.
+After introducing KANs, There have been efficient variants (SineKAN [7], ReLU-KAN [10], Efficient-KAN [11], and others) that recover computational efficiency to some extent while preserving the advantages. In this work we bring back learnable B-spline activations functions to MLPs and examine sharing a **single** learnable B-spline activation function **per layer** in MLPs. This design choice dramatically reduces the number of learnable parameters while hopefully preserving the continual learning advantages of B-splines in neural networks.
 
 ---
 
@@ -103,7 +101,7 @@ We employ the following model:
 
 We evaluate our approach on two standard continual learning benchmarks:
 
-**Permuted MNIST**: A sequence of tasks where each task applies a random permutation to the 784 pixels of MNIST images. This benchmark tests domain-incremental learning.
+**Permuted MNIST**: A sequence of tasks where each task applies a random permutation to the 784 pixels of MNIST images. This benchmark tests domain incremental learning.
 
 **Split MNIST**: MNIST digits are divided into 5 classification tasks, with each task containing 2 digits (0-1, 2-3, 4-5, 6-7, 8-9). This benchmark tests class-incremental learning.
 
@@ -133,7 +131,7 @@ $$\text{Plasticity} = \frac{1}{T} \sum_{j=1}^{T} R_{j,j}$$
 
 
 ### 2.5 Training Protocol
-- **Sequential training**: Tasks learned one after another
+- **Sequential training** Tasks learned one after another
 - **5 epochs per task**
 - **5 random seeds** for statistical reliability
 - **Random Grid Search** Configs are found via Random Grid Search for each experiment and activation function for a fair comparison
@@ -145,7 +143,7 @@ $$\text{Plasticity} = \frac{1}{T} \sum_{j=1}^{T} R_{j,j}$$
 
 ### 3.1 Comparison with activations + Combining with CL methods
 
-We first evaluate B-spline activations against standard activation functions (ReLU, Tanh, GELU, PReLU, Swish) on the continual learning benchmarks without applying any explicit continual learning methods. The results show that B-spline activations provide notable improvements in mitigating catastrophic forgetting specially in domain-incremental benchmark. We then further examined B-Splines by combining them with two existing continual learning techniques, Elastic Weight Consolidation (EWC) [12] and Experience Replay (ER) [13], to see whether B-spline activations could be complementary to these techniques.
+We first evaluate B-spline activations against standard activation functions (ReLU, Tanh, GELU, PReLU, Swish) on the continual learning benchmarks without applying any explicit continual learning methods. The results show that B-spline activations provide notable improvements in mitigating catastrophic forgetting specially in domain incremental benchmark. We then further examined B-Splines by combining them with two existing continual learning techniques, Elastic Weight Consolidation (EWC) [12] and Experience Replay (ER) [13], to see whether B-spline activations could be complementary to these techniques.
 Table 1 summarizes our experiments results:
 
 <p align="center">
@@ -155,7 +153,7 @@ Table 1 summarizes our experiments results:
 
 
 **Key findings:**
--The improvement in forgetting without any explicit continual learning method (specially in domain-incremental benchmark) is notable B-spline shows **42% and 14% less forgetting** compared to the next-best activation, along with approximately **15% higher accuracy**, in Permuted MNIST and Split MNIST, respectively. The improvement is consistent across multiple seeds with low variance.
+-The improvement in forgetting without any explicit continual learning method (specially in domain incremental benchmark) is notable B-spline shows **42% and 14% less forgetting** compared to the next-best activation, along with approximately **15% higher accuracy**, in Permuted MNIST and Split MNIST, respectively. The improvement is consistent across multiple seeds with low variance.
 -B-spline activations provide **additional gains** when combined with strong continual learning methods and the best overal relusts are obtained by combining them. With EWC: **40% and 18% reduction in forgetting** and with ER: **33% and 12% forgetting reduction**.
 
 
@@ -182,10 +180,10 @@ The evolution of average accuracy over tasks demonstrates while ReLU, Tanh, GELU
 
 ### 3.2 Continual Regression Experiment
 
-We replicated the 1D regression experiment from KAN paper [1] to see wheather our approach could learn the peaks sequentially without forgetting the previous ones. In this experiment data around each peak is given to the network sequentially (instead of all at once). The result show that B-splines demonstrate ability to retain previously learned peaks while adapting to new ones. Unlike ReLU activation which exhibit severe catastrophic forgetting (completely losing earlier peaks).
+We replicated the 1D regression experiment from KAN paper [1] to see whether our approach could learn the peaks sequentially without forgetting the previous ones. In this experiment data around each peak is given to the network sequentially (instead of all at once). The result show that B-splines demonstrate the ability to retain previously learned peaks while adapting to new ones. Unlike ReLU activation which exhibit severe catastrophic forgetting (completely losing earlier peaks).
 
 
-- During this experiment we observed **high sensitivity** to hyperparameters, the number of control points, degree, and domain bounds. we used random grid search to find a good combination of hyperparemeters. This observation could point out a limitation of this approach.
+- During this experiment we observed **high sensitivity** to hyperparameters, the number of control points, degree, and domain bounds. we used random grid search to find a good combination of hyperparameters. This observation could point out a limitation of this approach.
 
 
 
@@ -242,20 +240,19 @@ The corresponding accuracy heatmaps visually confirm this trend.
 
 
 **Note**
-This ablations results are from the domain-incremnetal benchmark and for the split mnist dataset, the results showed that X
-All ablation results are reported on the domain-incremental benchmark. In the more challenging task-incremental Split MNIST setting, variations in hyperparameters did not lead to noticeable performance improvements.
+All ablation results are reported on the domain incremental benchmark. In the more challenging class incremental Split MNIST setting, variations in hyperparameters did not lead to noticeable performance improvements.
 
 ---
 
 ## 4. Conclusion
-In conclusion, our approach of using shared B-spline activation functions in MLPs could help in mitigating catastrophic forgetting. Our experiments demonstrate using shared B-spline activations reduce forgetting compared to standard activations even without explicit continual learning methods. They also provide complementary benefits when combined with techniques like EWC and Experience Replay. In ablations we X ReLU initialization and moderate numbers of control points (15-30) yield optimal performance, and sharing a single B-Spline across all layers still outperforms ReLU in terms of accuracy and forgetting.
+In conclusion, our approach of using shared B-spline activation functions in MLPs could help mitigate catastrophic forgetting. Our experiments demonstrate using shared B-spline activations reduces forgetting even without explicit continual learning methods. They also provide complementary benefits when combined with techniques like EWC and Experience Replay. In ablations we found that ReLU initialization and moderate numbers of control points (15-30) yield optimal performance, and sharing a single B-Spline across all layers still outperforms ReLU in terms of accuracy and forgetting.
 Studies on learnable activation functions have shown they allow for "a reduction of the overall size of the network for a given accuracy" due to their flexibility [5]. Our shared B-spline approach balances this flexibility with parameter efficiency: each layer has only `num_control_points` additional parameters (e.g., 20 parameters for default configuration).
 
 ---
 
 ## 5. Limitations and Future Work
 
-**Spline Input Overlap**: We discussed that B-splines have a locality property, meaning that changing the function in one input region only affects a limited part of the activation. Now what if two tasks require changes in the same region of the input space? In this case, both tasks rely on the same spline coefficients, and learning the new task inevitably updates coefficients that were important for the previous task. This problem becomes more severe in our approach, because the B-spline activation function is shared globally across the entire layer. Gating mechanisms or cotrol point regularization could potentially mitigate this issue, and we leave their investigation for future work.
+**Spline Input Overlap**: We discussed that B-splines have a locality property, meaning that changing the function in one input region only affects a limited part of the activation. Now what if two tasks require changes in the same region of the input space? In this case, both tasks rely on the same spline coefficients, and learning the new task inevitably updates coefficients that were important for the previous task. This problem becomes more severe in our approach, because the B-spline activation function is shared globally across the entire layer. Gating mechanisms or control point regularization could potentially mitigate this issue, and we leave their investigation for future work.
 
 **Scaling to Deeper Networks**: Our experiments focus on relatively shallow networks. Investigation in modern deep architectures is needed.
 
