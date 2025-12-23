@@ -224,16 +224,16 @@ Analysis of 3, 5, 7, 10, 15, 20, 30 and 50 control points revealed that accuracy
 
 
 <p align="center">
-  <img src="results/permuted_mnistviz_cp/metrics_comparison.png" alt="metrics_comparison">
+  <img src="results/permuted_mnist_viz_cp/metrics_comparison.png" alt="metrics_comparison">
 </p>
 
 
 The corresponding accuracy heatmaps visually confirm this trend.
 
 <p align="center">
-  <img src="results/permuted_mnistviz_cp/acc_matrix_cp_3.png" alt="acc_matrix_cp_3" width="45%"/>
-  <img src="results/permuted_mnistviz_cp/acc_matrix_cp_15.png" alt="acc_matrix_cp_15" width="45%"/>
-  <img src="results/permuted_mnistviz_cp/acc_matrix_cp_50.png" alt="acc_matrix_cp_50" width="45%"/>
+  <img src="results/permuted_mnist_viz_cp/acc_matrix_cp_3.png" alt="acc_matrix_cp_3" width="45%"/>
+  <img src="results/permuted_mnist_viz_cp/acc_matrix_cp_15.png" alt="acc_matrix_cp_15" width="45%"/>
+  <img src="results/permuted_mnist_viz_cp/acc_matrix_cp_50.png" alt="acc_matrix_cp_50" width="45%"/>
 </p>
 
 
