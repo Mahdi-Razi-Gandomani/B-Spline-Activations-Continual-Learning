@@ -160,18 +160,17 @@ Table 1 summarizes our experiments results:
 
 
 <p align="center">
-  <img src="results/permuted_mnist_visualization/metrics_comparison.png" alt="metrics_comparison">
+  <img src="results/permuted_mnist_visualizations/metrics_comparison.png" alt="metrics_comparison">
 </p>
 
 <p align="center">
-  <img src="results/split_mnist_visualization/metrics_comparison.png" alt="metrics_comparison">
+  <img src="results/split_mnist_visualizations/metrics_comparison.png" alt="metrics_comparison">
 </p>
 
 
 <p align="center">
-  <img src="results/split_mnist_visualization/average_accuracy_comparison.png" alt="metrics_comparison">
+  <img src="results/split_mnist_visualizations/average_accuracy_comparison.png" alt="metrics_comparison">
 </p>
-
 
 
 The evolution of average accuracy over tasks demonstrates while ReLU, Tanh, GELU, and PReLU all show severe degradation after each new task, B-spline maintains a much more gradual decline.
