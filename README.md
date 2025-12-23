@@ -28,7 +28,6 @@ Inspired by recent developments in Kolmogorov-Arnold Networks (KANs), this proje
 B-splines (basis splines) are piecewise polynomial functions that can represent smooth curves [3]. 
 
 
-
 B-splines can be computed efficiently using the Cox-de Boor formula:
 
 $$
@@ -38,7 +37,6 @@ B_{i,0}(x) =
 0 & \text{otherwise}
 \end{cases}
 $$
-
 
 
 $$B_{i,k}(x) = \frac{x - t_i}{t_{i+k} - t_i}B_{i,k-1}(x) + \frac{t_{i+k+1} - x}{t_{i+k+1} - t_{i+1}}B_{i+1,k-1}(x)$$
@@ -147,7 +145,7 @@ $$\text{Plasticity} = \frac{1}{T} \sum_{j=1}^{T} R_{j,j}$$
 
 ### 3.1 Comparison with activations + Combining with CL methods
 
-We first evaluate B-spline activations against standard activation functions (ReLU, Tanh, GELU, PReLU, Swish) on the continual learning benchmarks without applying any explicit continual learning methods. The results show that B-spline activations provide notable improvements in mitigating catastrophic forgetting specially in domain-incremental benchmark. We then further examined B-Splines by combining them with two existing continual learning techniques, Elastic Weight Consolidation (EWC) and Experience Replay (ER), to see whether B-spline activations could be complementary to these techniques.
+We first evaluate B-spline activations against standard activation functions (ReLU, Tanh, GELU, PReLU, Swish) on the continual learning benchmarks without applying any explicit continual learning methods. The results show that B-spline activations provide notable improvements in mitigating catastrophic forgetting specially in domain-incremental benchmark. We then further examined B-Splines by combining them with two existing continual learning techniques, Elastic Weight Consolidation (EWC) [12] and Experience Replay (ER) [13], to see whether B-spline activations could be complementary to these techniques.
 Table 1 summarizes our experiments results:
 
 <p align="center">
@@ -254,7 +252,7 @@ Studies on learnable activation functions have shown they allow for "a reduction
 
 ---
 
-## 8 Limitations and Future Work
+## 5. Limitations and Future Work
 
 **Spline Input Overlap**: We discussed that B-splines have a locality property, meaning that changing the function in one input region only affects a limited part of the activation. Now what if two tasks require changes in the same region of the input space? In this case, both tasks rely on the same spline coefficients, and learning the new task inevitably updates coefficients that were important for the previous task. This problem becomes more severe in our approach, because the B-spline activation function is shared globally across the entire layer. Gating mechanisms or cotrol point regularization could potentially mitigate this issue, and we leave their investigation for future work.
 
@@ -267,7 +265,7 @@ Studies on learnable activation functions have shown they allow for "a reduction
 
 ---
 
-## 5. Project Structure
+## 6. Project Structure
 
 ```
 .
@@ -284,7 +282,7 @@ Studies on learnable activation functions have shown they allow for "a reduction
 
 ---
 
-## 6. Usage
+## 7. Usage
 
 ### Compare activations:
 ```bash
@@ -336,7 +334,9 @@ arXiv
 [11] Patra, S., Panda, S., Parida, B. K., Arya, M., Jacobs, K., Bondar, D. I., & Sen, A. (2024). Physics Informed Kolmogorov-Arnold Neural Networks for Dynamical Analysis via Efficient-KAN and WAV-KAN. arXiv preprint arXiv:2407.18373. 
 arXiv
 
+[12] Kirkpatrick, J., Pascanu, R., Rabinowitz, N., Veness, J., Desjardins, G., Rusu, A. A., ... & Hadsell, R. (2017). Overcoming catastrophic forgetting in neural networks. Proceedings of the National Academy of Sciences, 114(13), 3521-3526.
 
+[13] Rolnick, D., Ahuja, A., Schwarz, J., Lillicrap, T. P., & Wayne, G. (2019). Experience replay for continual learning. In Advances in Neural Information Processing Systems (NeurIPS), 32.
 
 ---
 
