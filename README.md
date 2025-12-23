@@ -89,6 +89,8 @@ The control points $c_i$ can be initialized to approximate standard activation f
 where $x_i$ are uniformly spaced points in $[\text{start\_point}, \text{end\_point}]$.
 
 
+
+
 ### 2.2 Network Architecture
 
 We employ the following model:
