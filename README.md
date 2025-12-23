@@ -234,7 +234,8 @@ The corresponding accuracy heatmaps visually confirm this trend.
 
 <p align="center">
   <img src="results/permuted_mnist_viz_cp/acc_matrix_cp_3.png" alt="acc_matrix_cp_3" width="45%"/>
-  <img src="results/permuted_mnist_viz_cp/acc_matrix_cp_15.png" alt="acc_matrix_cp_15" width="45%"/>
+  <img src="results/permuted_mnist_viz_cp/acc_matrix_cp_15.png" alt="acc_matrix_cp_7" width="45%"/>
+  <img src="results/permuted_mnist_viz_cp/acc_matrix_cp_50.png" alt="acc_matrix_cp_15" width="45%"/>
   <img src="results/permuted_mnist_viz_cp/acc_matrix_cp_50.png" alt="acc_matrix_cp_50" width="45%"/>
 </p>
 
