@@ -201,11 +201,11 @@ We conducted ablation studies with 3 random seeds to systematically evaluate the
 
 #### 3.3.1 Initialization Strategy
 
-Comparing random, identity, ReLU, and leaky ReLU initialization for control points revealed ReLU and leaky ReLU initialization achieve the best performance with high accuracy and low forgetting, while random initialization underperforms. Identity initialization is moderately effective but lower accuracy and higher forgetting than ReLU.
+Comparing random, identity, ReLU, and leaky ReLU initialization for control points revealed ReLU and leaky ReLU initialization achieve the best performance with high accuracy and low forgetting, while random and identity initializations underperform.
 
 
 <p align="center">
-  <img src="results/permuted_mnist_viz_init/metrics_comparison.png" alt="metrics_comparison">
+  <img src="results/permuted_mnist_viz_init/metrics_comparison.png" alt="init_comparison">
 </p>
 
 
