@@ -150,7 +150,10 @@ $$\text{Plasticity} = \frac{1}{T} \sum_{j=1}^{T} R_{j,j}$$
 We first evaluate B-spline activations against standard activation functions (ReLU, Tanh, GELU, PReLU, Swish) on the continual learning benchmarks without applying any explicit continual learning methods. The results show that B-spline activations provide notable improvements in mitigating catastrophic forgetting specially in domain-incremental benchmark. We then further examined B-Splines by combining them with two existing continual learning techniques, Elastic Weight Consolidation (EWC) and Experience Replay (ER), to see whether B-spline activations could be complementary to these techniques.
 Table 1 summarizes our experiments results:
 
-<Add table>
+<p align="center">
+  <img src="results/table1.png" alt="comp">
+</p>
+
 
 
 **Key findings:**
@@ -214,7 +217,9 @@ Comparing random, identity, ReLU, and leaky ReLU initialization for control poin
 
 We next evaluate the effect of sharing a single B-spline activation across all layers versus using layer-specific activations. Table 2 demonstrate even sharing one single B-Spline activation results in less forgetting than using ReLU.
 
-<Add table>
+<p align="center">
+  <img src="results/table2.png" alt="comp">
+</p>
 
 
 #### 3.3.3 Number of Control Points
