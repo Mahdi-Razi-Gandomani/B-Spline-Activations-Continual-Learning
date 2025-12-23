@@ -159,17 +159,17 @@ Table 1 summarizes our experiments results:
 
 
 
-<p align="center">
+<!-- <p align="center">
   <img src="results/permuted_mnist_visualizations/metrics_comparison.png" alt="metrics_comparison">
 </p>
 
 <p align="center">
   <img src="results/split_mnist_visualizations/metrics_comparison.png" alt="metrics_comparison">
-</p>
+</p> -->
 
 
 <p align="center">
-  <img src="results/split_mnist_visualizations/average_accuracy_comparison.png" alt="metrics_comparison">
+  <img src="results/permuted_mnist_visualizations/average_accuracy_comparison.png" alt="metrics_comparison">
 </p>
 
 
